@@ -19,12 +19,17 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 # Start a new stage from scratch
 FROM alpine:latest  
 
+# Add ca-certificates for HTTPS requests by the application
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
+
+# Make sure the binary is executable
+RUN chmod o+rx /root
+RUN chmod +x ./main
 
 # Command to run the executable
 CMD ["./main"]
