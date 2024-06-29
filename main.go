@@ -36,6 +36,18 @@ var (
 
 var client *ethclient.Client
 
+type MyEvent struct {
+    Version    string `json:"version"`
+    ID         string `json:"id"`
+    DetailType string `json:"detail-type"`
+    Source     string `json:"source"`
+    AccountID  string `json:"account"`
+    Time       string `json:"time"`
+    Region     string `json:"region"`
+    Resources  []string `json:"resources"`
+    Detail     json.RawMessage `json:"detail"` // Use RawMessage for flexibility
+}
+
 func HandleRequest(ctx context.Context, event MyEvent) (string, error) {
 	var err error
 	client, err = ethclient.Dial(OptRPCEndpoint)
