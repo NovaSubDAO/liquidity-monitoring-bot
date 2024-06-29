@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math/big"
 	"os"
 	"strings"
 
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/NovaSubDAO/nova-sdk/go/pkg/sdk"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
@@ -35,7 +37,19 @@ var (
 
 var client *ethclient.Client
 
-func main() {
+type MyEvent struct {
+    Version    string `json:"version"`
+    ID         string `json:"id"`
+    DetailType string `json:"detail-type"`
+    Source     string `json:"source"`
+    AccountID  string `json:"account"`
+    Time       string `json:"time"`
+    Region     string `json:"region"`
+    Resources  []string `json:"resources"`
+    Detail     json.RawMessage `json:"detail"` // Use RawMessage for flexibility
+}
+
+func HandleRequest(ctx context.Context, event MyEvent) (string, error) {
 	var err error
 	client, err = ethclient.Dial(OptRPCEndpoint)
 	if err != nil {
@@ -46,6 +60,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("error creating Discord session: %v", err)
 	}
+	defer dg.Close()
 
 	dg.AddHandler(onReady)
 
@@ -55,7 +70,9 @@ func main() {
 	}
 	defer dg.Close()
 
-	select {}
+	// select {}
+
+    return "Liquidity monitoring bot executed successfully!", nil
 }
 
 func onReady(s *discordgo.Session, event *discordgo.Ready) {
@@ -134,4 +151,8 @@ func sendDataToChannel(s *discordgo.Session) {
 // Helper function to format numbers with commas
 func formatWithCommas(value int64) string {
 	return humanize.Comma(value)
+}
+
+func main() {
+    lambda.Start(HandleRequest)
 }
