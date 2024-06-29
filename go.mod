@@ -11,6 +11,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/NovaSubDAO/nova-sdk/go v0.0.0-20240629044538-14ae6a6c12d7 // indirect
 	github.com/StackExchange/wmi v1.2.1 // indirect
+	github.com/aws/aws-lambda-go v1.47.0 // indirect
 	github.com/bits-and-blooms/bitset v1.10.0 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.2.0 // indirect
 	github.com/consensys/bavard v0.1.13 // indirect

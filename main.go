@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/NovaSubDAO/nova-sdk/go/pkg/sdk"
 	"github.com/bwmarrin/discordgo"
 	"github.com/dustin/go-humanize"
@@ -35,7 +36,7 @@ var (
 
 var client *ethclient.Client
 
-func main() {
+func HandleRequest(ctx context.Context, event MyEvent) (string, error) {
 	var err error
 	client, err = ethclient.Dial(OptRPCEndpoint)
 	if err != nil {
@@ -56,6 +57,8 @@ func main() {
 	defer dg.Close()
 
 	select {}
+
+    return "Liquidity monitoring bot executed successfully!", nil
 }
 
 func onReady(s *discordgo.Session, event *discordgo.Ready) {
@@ -134,4 +137,8 @@ func sendDataToChannel(s *discordgo.Session) {
 // Helper function to format numbers with commas
 func formatWithCommas(value int64) string {
 	return humanize.Comma(value)
+}
+
+func main() {
+    lambda.Start(HandleRequest)
 }
