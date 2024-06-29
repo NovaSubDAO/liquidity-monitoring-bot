@@ -60,6 +60,7 @@ func HandleRequest(ctx context.Context, event MyEvent) (string, error) {
 	if err != nil {
 		log.Fatalf("error creating Discord session: %v", err)
 	}
+	defer dg.Close()
 
 	dg.AddHandler(onReady)
 
@@ -69,7 +70,7 @@ func HandleRequest(ctx context.Context, event MyEvent) (string, error) {
 	}
 	defer dg.Close()
 
-	select {}
+	// select {}
 
     return "Liquidity monitoring bot executed successfully!", nil
 }
