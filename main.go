@@ -97,7 +97,7 @@ func getPoolBalance(tokenAddress common.Address, decimals int) float64 {
 
 func getPriceAndSlippage() (float64, float64, error) {
 	novaSdk, err := sdk.NewNovaSDK(OptRPCEndpoint, OptChainId)
-	amount := big.NewInt(1e8)
+	amount := big.NewInt(1e9)
 	slippage, expectedPrice, _, err := novaSdk.GetSlippage("USDC", amount)
 	if err != nil {
 		return 0, 0, err
@@ -117,10 +117,10 @@ func sendDataToChannel(s *discordgo.Session) {
 	// Format numbers
 	formattedSdaiBalance := formatWithCommas(int64(sdaiBalance))
 	formattedUsdcBalance := formatWithCommas(int64(usdcBalance))
-	formattedSlippage := fmt.Sprintf("%.4f%%", slippage)
-	formattedExpectedPrice := fmt.Sprintf("%.4f", expectedPrice)
+	formattedSlippage := fmt.Sprintf("%.6f%%", slippage)
+	formattedExpectedPrice := fmt.Sprintf("%.6f", expectedPrice)
 
-	message := fmt.Sprintf("**Velodrome CL1-USDC/sDAI pool**\n- sDAI balance: %s\n- USDC balance: %s\n- Slippage (for 100 USDC): %s\n- Venue Price (USDC/sDAI): %s",
+	message := fmt.Sprintf("**Velodrome CL1-USDC/sDAI pool**\n- sDAI balance: %s\n- USDC balance: %s\n- Slippage (for 1k USDC): %s\n- Venue Price (USDC/sDAI): %s",
 		formattedSdaiBalance, formattedUsdcBalance, formattedSlippage, formattedExpectedPrice)
 
 	_, err = s.ChannelMessageSend(ChannelID, message)
